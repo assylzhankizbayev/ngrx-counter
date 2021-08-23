@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { CountClearAction, CountDecreaseAction, CountIncreaseAction } from './reducers/count/count.actions';
-import { CountState } from './reducers/count/count.reducer';
-import { selectCount, selectUpdatedAt } from './reducers/count/count.selectors';
-import { map } from "rxjs/operators";
+import { countNode } from './reducers/count/count.reducer';
+import { clear, decrease, increase } from './reducers/count/count.actions';
 
 @Component({
   selector: 'app-root',
@@ -12,21 +10,21 @@ import { map } from "rxjs/operators";
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  public count$: Observable<number> = this.store$.pipe(select(selectCount));
-  public disableDecrease$: Observable<boolean> = this.count$.pipe(map(count => count <= 0));
-  public updatedAt$: Observable<number> = this.store$.pipe(select(selectUpdatedAt));
+  public count$: Observable<number>;
 
-  constructor(private store$: Store<CountState>) {}
+  constructor(private store$: Store<{ count: number }>) {
+    this.count$ = store$.select(countNode);
+  }
 
   increase(): void {
-    this.store$.dispatch(new CountIncreaseAction());
+    this.store$.dispatch(increase());
   }
 
   decrease(): void {
-    this.store$.dispatch(new CountDecreaseAction());
+    this.store$.dispatch(decrease());
   }
 
   clear(): void {
-    this.store$.dispatch(new CountClearAction());
+    this.store$.dispatch(clear());
   }
 }

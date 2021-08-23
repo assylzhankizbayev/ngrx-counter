@@ -5,11 +5,9 @@ import { AppComponent } from './app.component';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
-import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { RouterModule } from '@angular/router';
-import { AppEffects } from './app.effects';
-import { reducers, metaReducers } from './reducers';
+import { countReducer } from './reducers/count/count.reducer';
 
 @NgModule({
   declarations: [
@@ -18,15 +16,8 @@ import { reducers, metaReducers } from './reducers';
   imports: [
     BrowserModule,
     RouterModule.forRoot([]),
-    StoreModule.forRoot(reducers, {
-      metaReducers,
-      runtimeChecks: {
-        strictStateImmutability: true,
-        strictActionImmutability: true
-      }
-    }),
+    StoreModule.forRoot({ count: countReducer }),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    EffectsModule.forRoot([AppEffects]),
     StoreRouterConnectingModule.forRoot()
   ],
   providers: [],
