@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Store } from '@ngrx/store';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { countNode } from './reducers/count/count.reducer';
 import { clear, decrease, increase } from './reducers/count/count.actions';
@@ -13,7 +13,7 @@ export class AppComponent {
   public count$: Observable<number>;
 
   constructor(private store$: Store<{ count: number }>) {
-    this.count$ = store$.select(countNode);
+    this.count$ = store$.pipe(select(countNode));
   }
 
   increase(): void {
